@@ -58,6 +58,33 @@ class Bd {
 		  return despesas
 
 	}
+	pesquisar(despesa){
+		let despesasFiltradas = Array()
+		despesasFiltradas = this.recuperarTodosRegistros()
+	//ano
+	if(despesa.ano != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.ano == despesa.ano)
+	}
+	//mes
+	if(despesa.mes != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.mes == despesa.mes)
+	}
+	//dia
+	if(despesa.dia != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.dia == despesa.dia)
+	}
+	if(despesa.tipo != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+	}
+	if(despesa.descricao != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+	}
+	if(despesa.valor != ''){
+		despesasFiltradas =despesasFiltradas.filter(d => d.valor == despesa.valor)
+	}
+	return despesasFiltradas
+
+	}
 
 }
 
@@ -91,6 +118,12 @@ function cadastrarDespesa() {
 		document.getElementById('modal_btn').className ='btn btn-success'
 
 		$('#modalRegistraDespesa').modal('show') 
+		ano.value =''
+		mes.value= ''
+		dia.value=''
+		tipo.value=''
+		descricao.value=''
+		valor.value=''
 	} else {
 		
 		document.getElementById('modal_titulo').innerHTML ='Erro na inclusao do registro'
@@ -100,10 +133,12 @@ function cadastrarDespesa() {
 		document.getElementById('modal_btn').className ='btn btn-danger'
 
 		$('#modalRegistraDespesa').modal('show') 
+
+		
 	}
 }
 
-function carregaListaDespesas() {
+function carregaListaDespesas(despesas= Array()) {
 	let despesas = Array()
 	
 	despesas =bd.recuperarTodosRegistros()
@@ -135,4 +170,18 @@ function carregaListaDespesas() {
 	  linha.insertCell(2).innerHTML = d.descricao
 	  linha.insertCell(3).innerHTML = d.valor
 	})
+}
+function pesquisarDespesa(){
+	let ano = document.getElementById('ano').value
+	let mes  = document.getElementById('mes').value
+	let dia  = document.getElementById('dia').value
+	let	tipo  = document.getElementById('tipo').value
+	let descricao  = document.getElementById('descricao').value
+	let valor  = document.getElementById('valor').value
+
+	let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
+	let despesas = bd.pesquisar(despesa)
+	
+	this.carregaListaDespesas(despesas)
+
 }
